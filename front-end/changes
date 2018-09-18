@@ -1,0 +1,68 @@
+//Newfile: app/controllers/message_socket_controller.js
+exports.manage_messages = function (socket) {
+  socket.on('send_message', function (data) {
+    console.log('Message over websocket: ' + data);
+    socket.broadcast.emit('receive_message', data);
+  });
+};
+
+//config/websocket.js
+var message_socket_controller = require('../app/controllers/message_socket_controller');
+
+// in module.exports, below sever initialization
+var io = require('socket.io').listen(server);
+
+io.sockets.on('connection', message_socket_controller.manage_messages);
+
+
+
+//Client side
+
+//public/javascripts/controllers/chat_controller.js
+waccchatApp.controller('ChatController', function ($scope, $http, $timeout, Message, Socket) {
+
+$scope.send_message = function () {
+  Message.save($scope.message);
+>>>    socket.emit('send_message', $scope.message);
+  add_message($scope.message);
+  $scope.message = {name: $scope.message.name};
+};
+
+socket.on('receive_message', function (data) {
+  add_message(data);
+});
+
+
+
+//New file: public/javascripts/services/socket_service.js
+wacchatApp.factory('socket', function ($rootScope) {
+  var socket = io.connect();
+
+  // Copied from http://www.ibm.com/developerworks/library/wa-nodejs-polling-app/
+  return {
+    on: function (eventName, callback) {
+      socket.on(eventName, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      });
+    },
+    emit: function (eventName, data, callback) {
+      socket.emit(eventName, data, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      })
+    }
+  };
+});
+
+// Index.html
+<script src="javascripts/services/socket_service.js"></script>
+
+<!-- Socket.io -->
+<script src="https://cdn.socket.io/socket.io-1.1.0.js"></script>
