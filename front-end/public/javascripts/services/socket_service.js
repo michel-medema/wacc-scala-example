@@ -29,7 +29,7 @@ wacchatApp.factory('socket', function ($rootScope) {
     }
   };
 */
-  var socket =  new WebSocket("ws://129.125.75.187:8080/socket.io/");
+  var socket =  new WebSocket("ws://localhost:8080/socket.io/");
   
   return {
     on: function (eventName, callback) {

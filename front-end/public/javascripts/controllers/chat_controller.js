@@ -2,7 +2,7 @@ wacchatApp.controller('ChatController', function($scope, $http, $timeout, Messag
   $scope.message = {};
   $http({
     method: 'GET',
-    url: 'http://129.125.75.187:8080/api'
+    url: 'http://localhost:8080/api'
   }).success(function(data) {
     $scope.chat_content = data;
   });
