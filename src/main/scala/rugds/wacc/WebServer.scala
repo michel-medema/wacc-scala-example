@@ -47,9 +47,9 @@ object WebServer {
 		.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
 
 	def main(args: Array[String]) {
-		//val mongoClient: MongoClient = MongoClient("mongodb://wacc-mongo")
-		//val database: MongoDatabase = mongoClient.getDatabase("wacchat")
-		//val collection: MongoCollection[Document] = database.getCollection("messages")
+		val mongoClient: MongoClient = MongoClient("mongodb://wacc-mongo")
+		val database: MongoDatabase = mongoClient.getDatabase("wacchat")
+		val collection: MongoCollection[Document] = database.getCollection("messages")
 
 		// Needed to allow POST requests with CORS.
 		implicit def rejectionHandler: RejectionHandler =
@@ -77,24 +77,21 @@ object WebServer {
 				)) {
 					path("messages") {
 						get {
-							/*onComplete( collection.find().toFuture() ) {
+							onComplete( collection.find().toFuture() ) {
 								case Success(null) => complete("")
 								case Success(messages: Seq[Document]) => complete(messages.map( m => ChatMessage(m.get("name").get.asString().getValue, m.get("content").get.asString().getValue).toJson).toJson)
 								case Failure(e) => complete((InternalServerError, e.getMessage))
-							}*/
-							complete("")
+							}
 						} ~
 						post {
 							entity(as[ChatMessage]) { message =>
-								/*println(message)
+								println(message)
 
 								val document: Document = Document.apply( message.toJson.compactPrint )
 								onComplete(collection.insertOne( document ).head()) {
 									case Success(c) => complete("")
 									case Failure(e) => complete((InternalServerError, e.getMessage))
-								}*/
-
-								complete("")
+								}
 							}
 						}
 					} ~
