@@ -10,3 +10,5 @@ libraryDependencies ++= Seq(
 	"com.typesafe.akka" %% "akka-http-spray-json" % "10.1.5",
 	"org.mongodb.scala" %% "mongo-scala-driver" % "2.4.1"
 )
+
+enablePlugins(DockerPlugin)
