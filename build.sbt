@@ -11,4 +11,7 @@ libraryDependencies ++= Seq(
 	"org.mongodb.scala" %% "mongo-scala-driver" % "2.4.1"
 )
 
-enablePlugins(DockerPlugin)
+enablePlugins(JavaAppPackaging)
+
+packageName in Docker := "wacc-backend"
+dockerExposedPorts := Seq(8080)

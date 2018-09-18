@@ -47,9 +47,9 @@ object WebServer {
 		.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
 
 	def main(args: Array[String]) {
-		val mongoClient: MongoClient = MongoClient("mongodb://145.97.146.160")
-		val database: MongoDatabase = mongoClient.getDatabase("wacchat")
-		val collection: MongoCollection[Document] = database.getCollection("messages")
+		//val mongoClient: MongoClient = MongoClient("mongodb://wacc-mongo")
+		//val database: MongoDatabase = mongoClient.getDatabase("wacchat")
+		//val collection: MongoCollection[Document] = database.getCollection("messages")
 
 		// Needed to allow POST requests with CORS.
 		implicit def rejectionHandler: RejectionHandler =
@@ -77,21 +77,24 @@ object WebServer {
 				)) {
 					path("messages") {
 						get {
-							onComplete( collection.find().toFuture() ) {
+							/*onComplete( collection.find().toFuture() ) {
 								case Success(null) => complete("")
 								case Success(messages: Seq[Document]) => complete(messages.map( m => ChatMessage(m.get("name").get.asString().getValue, m.get("content").get.asString().getValue).toJson).toJson)
 								case Failure(e) => complete((InternalServerError, e.getMessage))
-							}
+							}*/
+							complete("")
 						} ~
 						post {
 							entity(as[ChatMessage]) { message =>
-								println(message)
+								/*println(message)
 
 								val document: Document = Document.apply( message.toJson.compactPrint )
 								onComplete(collection.insertOne( document ).head()) {
 									case Success(c) => complete("")
 									case Failure(e) => complete((InternalServerError, e.getMessage))
-								}
+								}*/
+
+								complete("")
 							}
 						}
 					} ~
@@ -112,7 +115,7 @@ object WebServer {
 			}
 
 		// Start web server.
-		val bindingFuture: Future[Http.ServerBinding] = Http().bindAndHandle(route, "129.125.75.187", 8080)
+		val bindingFuture: Future[Http.ServerBinding] = Http().bindAndHandle(route, "localhost", 8080)
 
 		println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
 		StdIn.readLine() // let it run until user presses return
