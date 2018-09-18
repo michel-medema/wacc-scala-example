@@ -12,6 +12,8 @@ libraryDependencies ++= Seq(
 )
 
 enablePlugins(JavaAppPackaging)
+enablePlugins(DockerPlugin)
 
+dockerBaseImage       := "openjdk:jre"
 packageName in Docker := "wacc-backend"
 dockerExposedPorts := Seq(8080)
