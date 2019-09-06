@@ -20,6 +20,7 @@ import org.mongodb.scala.{Document, MongoClient, MongoCollection, MongoDatabase}
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.io.StdIn
 import scala.util.{Failure, Success}
+import scala.concurrent.Await
 
 object WebServer {
 	implicit val system: ActorSystem = ActorSystem("my-system")
@@ -115,9 +116,16 @@ object WebServer {
 		val bindingFuture: Future[Http.ServerBinding] = Http().bindAndHandle(route, "0.0.0.0", 8080)
 
 		println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
-		StdIn.readLine() // let it run until user presses return
-		bindingFuture
-			.flatMap(_.unbind()) // trigger unbinding from the port
-			.onComplete(_ => system.terminate()) // and shutdown when done
+		//StdIn.readLine() // let it run until user presses return
+		//bindingFuture
+		//	.flatMap(_.unbind()) // trigger unbinding from the port
+		//	.onComplete(_ => system.terminate()) // and shutdown when done
+		bindingFuture.onComplete {
+			case Success(_) => println("Success!")
+			case Failure(error) => println(s"Failed: ${error.getMessage}")
+		}
+
+		import scala.concurrent.duration._
+		Await.result(bindingFuture, 3.seconds)
 	}
 }
