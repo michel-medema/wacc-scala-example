@@ -41,13 +41,13 @@ object WebServer {
 	}
 
 	def websocketHandler(user: String): Flow[Message, Message, Any] = Flow[Message].collect {
-			case TextMessage.Strict(msg) ⇒ msg.parseJson.convertTo[ChatMessage]
-		}
-		.via(chatRoom.websocketFlow(user))
-		.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
+		case TextMessage.Strict(msg) ⇒ msg.parseJson.convertTo[ChatMessage]
+	}
+	.via(chatRoom.websocketFlow(user))
+	.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
 
 	def main(args: Array[String]) {
-		val mongoClient: MongoClient = MongoClient("mongodb://wacc-mongo")
+		val mongoClient: MongoClient = MongoClient("mongodb://172.19.0.2")
 		val database: MongoDatabase = mongoClient.getDatabase("wacchat")
 		val collection: MongoCollection[Document] = database.getCollection("messages")
 
@@ -95,11 +95,11 @@ object WebServer {
 							}
 						}
 					} ~
-						pathEndOrSingleSlash {
-							get {
-								complete(Title("WacChat"))
-							}
+					pathEndOrSingleSlash {
+						get {
+							complete(Title("WacChat"))
 						}
+					}
 				}
 			} ~
 			pathPrefix("socket.io") {
