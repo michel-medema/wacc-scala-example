@@ -12,6 +12,9 @@ class MessageRepository {
 
 object MessageRepository {
   val messages: List[ChatMessage] = List(
-    ChatMessage("Test User", "A message!")
+    ChatMessage("Test User", "A message!"),
+    ChatMessage("User A", "Hello World!"),
+    ChatMessage("User B", "Hello Back!"),
+    ChatMessage("User A", "Goodbye!")
   )
 }

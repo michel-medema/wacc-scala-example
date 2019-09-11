@@ -15,7 +15,8 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 
 import scala.util.{Failure, Success}
 
-object GraphQLServer extends App {
+// Uncomment extends App to run this server.
+object GraphQLServer /*extends App*/ {
   implicit val system: ActorSystem = ActorSystem("graphql-system")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
@@ -50,5 +51,5 @@ object GraphQLServer extends App {
       }
     }
 
-  Http().bindAndHandle(route, "0.0.0.0", 8080)
+  Http().bindAndHandle(route, "0.0.0.0", 8081)
 }

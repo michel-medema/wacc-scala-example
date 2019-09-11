@@ -48,7 +48,7 @@ object WebServer {
 	.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
 
 	def main(args: Array[String]) {
-		val mongoClient: MongoClient = MongoClient("mongodb://172.19.0.2")
+		val mongoClient: MongoClient = MongoClient("mongodb://wacc-mongo")
 		val database: MongoDatabase = mongoClient.getDatabase("wacchat")
 		val collection: MongoCollection[Document] = database.getCollection("messages")
 

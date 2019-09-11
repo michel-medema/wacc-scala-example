@@ -1,4 +1,4 @@
-back-end/target
-back-end/project/target
+target
 front-end/node_modules
 front-end/bower_components
+.idea

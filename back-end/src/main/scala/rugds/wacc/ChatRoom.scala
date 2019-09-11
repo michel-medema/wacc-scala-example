@@ -16,7 +16,7 @@ class ChatRoom(actorSystem: ActorSystem) {
 	def websocketFlow(user: String): Flow[ChatMessage, ChatMessage, _] = {
 		// Flow that receives incoming messages and sends these to the chat room actor.
 		val in = Flow[ChatMessage]
-  		.map( (user, _))
+  		.map( (user, _) )
 			.to(chatInSink(user))
 
 		// New source based on an actor that receives messages from the chat room actor and outputs these.
