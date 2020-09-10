@@ -1,7 +1,8 @@
-package rugds.wacc
+package rugds.wacc.chatroom
 
 import akka.actor.{Actor, ActorRef}
 import rugds.wacc.WebServer.ChatMessage
+import rugds.wacc.chatroom.events.{UserJoined, UserLeft}
 
 class ChatRoomActor extends Actor {
 	var participants: Map[String, ActorRef] = Map.empty[String, ActorRef]

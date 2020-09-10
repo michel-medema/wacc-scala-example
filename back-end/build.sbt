@@ -2,15 +2,18 @@ name := "WacChat"
 
 version := "0.1"
 
-scalaVersion := "2.12.6"
+scalaVersion := "2.13.3"
+
+val AkkaVersion = "2.6.9"
+val AkkaHttpVersion = "10.2.0"
 
 libraryDependencies ++= Seq(
-	"com.typesafe.akka" %% "akka-http"   % "10.1.9",
-	"com.typesafe.akka" %% "akka-stream" % "2.5.25",
-	"com.typesafe.akka" %% "akka-http-spray-json" % "10.1.9",
-	"org.mongodb.scala" %% "mongo-scala-driver" % "2.7.0",
-	"org.sangria-graphql" %% "sangria" % "1.4.2",
-	"org.sangria-graphql" %% "sangria-spray-json" % "1.0.1"
+	"com.typesafe.akka" %% "akka-http"   % AkkaHttpVersion,
+	"com.typesafe.akka" %% "akka-stream" % AkkaVersion,
+	"com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+	"org.mongodb.scala" %% "mongo-scala-driver" % "4.1.0",
+	"org.sangria-graphql" %% "sangria" % "2.0.0",
+	"org.sangria-graphql" %% "sangria-spray-json" % "1.0.2"
 )
 
 enablePlugins(JavaAppPackaging)

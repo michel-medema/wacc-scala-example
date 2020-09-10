@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Message} from "../message";
-import {MessageService} from "../message.service";
+import {MessageService} from "../services/message.service";
+import {SocketService} from "../services/socket.service";
 
 @Component({
   selector: 'message-list',
@@ -8,12 +9,18 @@ import {MessageService} from "../message.service";
   styleUrls: ['./message-list.component.css']
 })
 export class MessageListComponent implements OnInit {
-  messages: Message[]
+  messages: Message[] = [];
 
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService, private socketService: SocketService) {}
 
   ngOnInit(): void {
     this.getMessages();
+    this.subscribe();
+  }
+
+  subscribe(): void {
+    // TODO: Handle exceptions.
+    this.socketService.ws.subscribe( (message: Message) => this.messages.push(message) );
   }
 
   getMessages(): void {

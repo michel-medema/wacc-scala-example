@@ -1,4 +1,4 @@
-package rugds.wacc
+package rugds.wacc.graphql
 
 import rugds.wacc.WebServer.ChatMessage
 

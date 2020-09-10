@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Message} from "../message";
-import {MessageService} from "../message.service";
+import {MessageService} from "../services/message.service";
 import {FormControl, FormGroup} from "@angular/forms";
+import {SocketService} from "../services/socket.service";
 
 @Component({
   selector: 'message-form',
@@ -17,7 +18,7 @@ export class MessageFormComponent implements OnInit {
   @Input() messages: Message[]
   hasError: boolean = false
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService, private socketService: SocketService) { }
 
   ngOnInit(): void {
   }
@@ -33,8 +34,11 @@ export class MessageFormComponent implements OnInit {
       return;
     }
 
-    this.messageService.addMessage({ name, content } as Message).subscribe(message => this.messages.push(message) );
-    // TODO: Use web socket.
+    let message =  { name, content } as Message
+
+    this.socketService.ws.next( message );
+
+    this.messageService.addMessage(message).subscribe(message => this.messages.push(message) );
 
     this.hasError = false;
     this.messageForm.reset();

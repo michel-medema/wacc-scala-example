@@ -1,11 +1,10 @@
-package rugds.wacc
+package rugds.wacc.graphql
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.Route
-import akka.stream.ActorMaterializer
+import akka.http.scaladsl.server.{Route, StandardRoute}
 import sangria.ast.Document
 import sangria.execution._
 import sangria.parser.QueryParser
@@ -15,14 +14,14 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 
 import scala.util.{Failure, Success}
 
+
 // Uncomment extends App to run this server.
-object GraphQLServer /*extends App*/ {
+object GraphQLServer extends App {
   implicit val system: ActorSystem = ActorSystem("graphql-system")
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   import system.dispatcher
 
-  def executeQuery(query: Document) = {
+  def executeQuery(query: Document): StandardRoute = {
     complete(
       Executor.execute(SchemaDefinition.schema, query, new MessageRepository).map(StatusCodes.OK -> _)
     )
@@ -51,5 +50,5 @@ object GraphQLServer /*extends App*/ {
       }
     }
 
-  Http().bindAndHandle(route, "0.0.0.0", 8081)
+  Http().newServerAt("0.0.0.0", 8081).bind(route)
 }

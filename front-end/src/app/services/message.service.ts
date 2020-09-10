@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
-import {Message} from "./message";
+import {Message} from "../message";
 import {Observable, of, throwError} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, tap} from "rxjs/operators";
+
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
-  private messageUrl = 'api/messages';
+  private API_URL= environment.API_URL;
+  private messageUrl = this.API_URL + 'api/messages';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,10 +20,10 @@ export class MessageService {
   constructor(private http: HttpClient) { }
 
   getMessages(): Observable<Message[]> {
-    return of([
-      {name: "Test", content: "Message."},
-      {name: "Test 1", content: "Message."}
-    ])
+    return this.http.get<Message[]>(this.messageUrl)
+      .pipe(
+        catchError(this.handleError<Message[]>('getMessages', []))
+      );
   }
 
   addMessage(message: Message): Observable<Message> {

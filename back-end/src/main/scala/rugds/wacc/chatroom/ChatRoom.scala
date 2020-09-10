@@ -1,14 +1,13 @@
-package rugds.wacc
+package rugds.wacc.chatroom
 
 import akka.NotUsed
 import akka.actor.{ActorSystem, Props}
 import akka.stream.{ActorMaterializer, OverflowStrategy}
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import rugds.wacc.WebServer.ChatMessage
+import rugds.wacc.chatroom.events.{UserJoined, UserLeft}
 
-class ChatRoom(actorSystem: ActorSystem) {
-	implicit val system: ActorSystem = ActorSystem("my-system")
-	implicit val materializer: ActorMaterializer = ActorMaterializer()
+class ChatRoom(actorSystem: ActorSystem ) {
 	private[this] val chatRoomActor = actorSystem.actorOf(Props(classOf[ChatRoomActor]))
 
 	private def chatInSink(user: String): Sink[(String, ChatMessage), NotUsed] = Sink.actorRef[(String, ChatMessage)](chatRoomActor, UserLeft(user))
@@ -20,7 +19,7 @@ class ChatRoom(actorSystem: ActorSystem) {
 			.to(chatInSink(user))
 
 		// New source based on an actor that receives messages from the chat room actor and outputs these.
-		val out = Source.actorRef[ChatMessage](1, OverflowStrategy.fail)
+		val out = Source.actorRef[ChatMessage](10, OverflowStrategy.fail)
 			.mapMaterializedValue(chatRoomActor ! UserJoined(user, _))
 
 		Flow.fromSinkAndSource(in, out)
@@ -30,5 +29,5 @@ class ChatRoom(actorSystem: ActorSystem) {
 }
 
 object ChatRoom {
-	def apply()(implicit actorSystem: ActorSystem) = new ChatRoom(actorSystem)
+	def apply()(implicit actorSystem: ActorSystem ) = new ChatRoom(actorSystem)
 }

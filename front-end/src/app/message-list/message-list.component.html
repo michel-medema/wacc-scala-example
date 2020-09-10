@@ -10,7 +10,7 @@
         <ul class="list-group">
           <li class="list-group-item list-group-item-action" *ngFor="let message of messages">
             <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">L{{ message.name }}</h5>
+              <h5 class="mb-1">{{ message.name }}</h5>
               <small>3 days ago</small>
             </div>
             <p class="mb-1">{{ message.content }}</p>
