@@ -10,16 +10,16 @@ import rugds.wacc.chatroom.events.{UserJoined, UserLeft}
 class ChatRoom(actorSystem: ActorSystem ) {
 	private[this] val chatRoomActor = actorSystem.actorOf(Props(classOf[ChatRoomActor]))
 
-	private def chatInSink(user: String): Sink[(String, ChatMessage), NotUsed] = Sink.actorRef[(String, ChatMessage)](chatRoomActor, UserLeft(user))
+	private def chatInSink(user: String): Sink[(String, ChatMessage), NotUsed] =
+		Sink.actorRef[(String, ChatMessage)](chatRoomActor, UserLeft(user))
 
 	def websocketFlow(user: String): Flow[ChatMessage, ChatMessage, _] = {
 		// Flow that receives incoming messages and sends these to the chat room actor.
-		val in = Flow[ChatMessage]
-  		.map( (user, _) )
-			.to(chatInSink(user))
+		val in = Flow[ChatMessage].map( (user, _) ).to(chatInSink(user))
 
-		// New source based on an actor that receives messages from the chat room actor and outputs these.
-		val out = Source.actorRef[ChatMessage](10, OverflowStrategy.fail)
+		// Independent source that receives messages from chat room actor and outputs them.
+		val out = Source
+			.actorRef[ChatMessage](10, OverflowStrategy.fail)
 			.mapMaterializedValue(chatRoomActor ! UserJoined(user, _))
 
 		Flow.fromSinkAndSource(in, out)

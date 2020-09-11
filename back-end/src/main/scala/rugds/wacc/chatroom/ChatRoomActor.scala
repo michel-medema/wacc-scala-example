@@ -22,5 +22,6 @@ class ChatRoomActor extends Actor {
 	}
 
 	// Send message to all chat room users except the user who sent the message.
-	def broadcast(user: String, message: ChatMessage): Unit = participants.filter( p => p._1 != user ).values.foreach(_ ! message)
+	def broadcast(user: String, message: ChatMessage): Unit =
+		participants.filter( p => p._1 != user ).values.foreach(_ ! message)
 }

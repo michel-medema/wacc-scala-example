@@ -36,11 +36,13 @@ object WebServer {
 		case _  => None
 	}
 
-	def websocketHandler(user: String): Flow[Message, Message, NotUsed] = Flow[Message].collect {
-		case TextMessage.Strict(msg) ⇒ msg.parseJson.convertTo[ChatMessage]
-	}
-	.via(chatRoom.websocketFlow(user))
-	.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
+	def websocketHandler(user: String): Flow[Message, TextMessage.Strict, NotUsed] =
+		Flow[Message]
+			.collect {
+				case TextMessage.Strict(msg) ⇒ msg.parseJson.convertTo[ChatMessage]
+			}
+			.via(chatRoom.websocketFlow(user))
+			.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
 
 	def main(args: Array[String]) {
 		// TODO: The connection string should not be hard-coded.
@@ -73,8 +75,6 @@ object WebServer {
 						} ~
 						post {
 							entity(as[ChatMessage]) { message =>
-								println(message)
-
 								val document: Document = Document.apply( message.toJson.compactPrint )
 								onComplete(collection.insertOne( document ).head()) {
 									case Success(c) => complete(message.toJson)
@@ -93,7 +93,6 @@ object WebServer {
 			pathPrefix("socket.io") {
 				pathEndOrSingleSlash {
 					headerValue(extractWebsocketHeader) { websocketKey =>
-						println(s"Key: $websocketKey")
 						handleWebSocketMessages(websocketHandler(websocketKey))
 					}
 				}
