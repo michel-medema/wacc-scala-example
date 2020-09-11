@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
+  // TODO: Should not be localhost when back-end is running on different machine.
   host: "localhost",
   port: 8080,
-  API_URL: 'http://localhost:8080/'
+  API_URL: 'http://localhost:8080/api/'
 };
 
 /*

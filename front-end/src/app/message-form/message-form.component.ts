@@ -20,8 +20,7 @@ export class MessageFormComponent implements OnInit {
 
   constructor(private messageService: MessageService, private socketService: SocketService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   sendMessage(): void {
     let name = this.messageForm.value.name
@@ -36,8 +35,10 @@ export class MessageFormComponent implements OnInit {
 
     let message =  { name, content } as Message
 
+    // Send message over WebSocket connection.
     this.socketService.ws.next( message );
 
+    // Store message using the API.
     this.messageService.addMessage(message).subscribe(message => this.messages.push(message) );
 
     this.hasError = false;

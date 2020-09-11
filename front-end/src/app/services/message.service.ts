@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
 })
 export class MessageService {
   private API_URL= environment.API_URL;
-  private messageUrl = this.API_URL + 'api/messages';
+  private messageUrl = this.API_URL + 'messages';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
