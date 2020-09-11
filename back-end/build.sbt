@@ -16,9 +16,13 @@ libraryDependencies ++= Seq(
 	"org.sangria-graphql" %% "sangria-spray-json" % "1.0.2"
 )
 
+mainClass in Compile := Some("rugds.wacc.WebServer")
+
 enablePlugins(JavaAppPackaging)
 enablePlugins(DockerPlugin)
 
 dockerBaseImage       := "openjdk:jre"
 packageName in Docker := "wacc-backend"
-dockerExposedPorts := Seq(8080)
+dockerExposedPorts 		:= Seq(8080)
+dockerRepository 			:= Some("index.docker.io/michelm")
+dockerUpdateLatest		:= true

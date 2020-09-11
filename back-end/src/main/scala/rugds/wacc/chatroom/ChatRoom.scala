@@ -2,7 +2,7 @@ package rugds.wacc.chatroom
 
 import akka.NotUsed
 import akka.actor.{ActorSystem, Props}
-import akka.stream.{ActorMaterializer, OverflowStrategy}
+import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import rugds.wacc.WebServer.ChatMessage
 import rugds.wacc.chatroom.events.{UserJoined, UserLeft}

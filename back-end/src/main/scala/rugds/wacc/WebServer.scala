@@ -1,5 +1,6 @@
 package rugds.wacc
 
+import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
@@ -35,14 +36,15 @@ object WebServer {
 		case _  => None
 	}
 
-	def websocketHandler(user: String): Flow[Message, Message, Any] = Flow[Message].collect {
+	def websocketHandler(user: String): Flow[Message, Message, NotUsed] = Flow[Message].collect {
 		case TextMessage.Strict(msg) ⇒ msg.parseJson.convertTo[ChatMessage]
 	}
 	.via(chatRoom.websocketFlow(user))
 	.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
 
 	def main(args: Array[String]) {
-		val mongoClient: MongoClient = MongoClient("mongodb://localhost")
+		// TODO: The connection string should not be hard-coded.
+		val mongoClient: MongoClient = MongoClient("mongodb://wacc-mongo")
 		val database: MongoDatabase = mongoClient.getDatabase("wacchat")
 		val collection: MongoCollection[Document] = database.getCollection("messages")
 
