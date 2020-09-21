@@ -1,0 +1,27 @@
+version: '3'
+services:
+  front-end:
+    image: michelm/wacc-frontend
+    build: ./front-end
+    ports:
+      - "80:80"
+    networks:
+      - wacc-network
+  back-end:
+    container_name: back-end
+    image: michelm/wacc-backend
+    build: ./back-end/target/docker/stage
+    depends_on:
+      - mongodb
+    ports:
+      - "8080:8080"
+    networks:
+      - wacc-network
+  mongodb:
+    image: mongo
+    networks:
+      - wacc-network
+
+networks:
+  wacc-network:
+    driver: bridge
