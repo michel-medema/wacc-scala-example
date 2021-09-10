@@ -1,17 +1,17 @@
 name := "WacChat"
 version := "0.1"
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.6"
 
-val AkkaVersion = "2.6.9"
-val AkkaHttpVersion = "10.2.0"
+val AkkaVersion = "2.6.16"
+val AkkaHttpVersion = "10.2.6"
 
 libraryDependencies ++= Seq(
 	"com.typesafe.akka" %% "akka-http"   % AkkaHttpVersion,
 	"com.typesafe.akka" %% "akka-stream" % AkkaVersion,
 	"com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
-	"org.mongodb.scala" %% "mongo-scala-driver" % "4.1.0",
-	"org.sangria-graphql" %% "sangria" % "2.0.0",
+	"org.mongodb.scala" %% "mongo-scala-driver" % "4.3.2",
+	"org.sangria-graphql" %% "sangria" % "2.1.3",
 	"org.sangria-graphql" %% "sangria-spray-json" % "1.0.2"
 )
 

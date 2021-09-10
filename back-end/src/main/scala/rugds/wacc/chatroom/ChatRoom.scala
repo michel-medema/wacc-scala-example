@@ -7,7 +7,7 @@ import akka.stream.scaladsl.{Flow, Sink, Source}
 import rugds.wacc.WebServer.ChatMessage
 import rugds.wacc.chatroom.events.{UserJoined, UserLeft}
 
-class ChatRoom(actorSystem: ActorSystem ) {
+class ChatRoom(actorSystem: ActorSystem) {
 	private[this] val chatRoomActor = actorSystem.actorOf(Props(classOf[ChatRoomActor]))
 
 	private def chatInSink(user: String): Sink[(String, ChatMessage), NotUsed] =

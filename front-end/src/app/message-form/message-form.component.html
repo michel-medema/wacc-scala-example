@@ -1,25 +1,22 @@
 <div class="row" *ngIf="hasError">
   <div class="col-sm-12">
-    <div id='alert' class="alert alert-danger alert-dismissible" role="alert">
-      <a class="close" (click)="hasError=false;"> <span>×</span> </a>
+    <div class="alert alert-danger alert-dismissible" role="alert">
       <p id="message" class="mb-0">Please provide a name and a message!</p>
+      <button type="button" class="btn-close" aria-label="Close" (click)="clearError()"></button>
     </div>
   </div>
 </div>
 <div class="row">
   <div class="col-sm-12">
     <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+
       <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="message_name"><span class="fas fa-user"></span></span>
-        </div>
+        <span class="input-group-text" id="message_name"><span class="fas fa-user"></span></span>
         <input type="text" name='name' class="form-control" formControlName="name" placeholder="Enter your name">
       </div>
 
       <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="message_content"><span class="fas fa-comment"></span></span>
-        </div>
+        <span class="input-group-text" id="message_content"><span class="fas fa-comment"></span></span>
         <input type="text" name="content" class="form-control" formControlName="content" placeholder="Enter your message">
       </div>
 

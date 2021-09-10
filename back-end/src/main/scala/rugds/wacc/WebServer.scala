@@ -44,7 +44,7 @@ object WebServer {
 			.via(chatRoom.websocketFlow(user))
 			.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
 
-	def main(args: Array[String]) {
+	def main(args: Array[String]): Unit = {
 		// TODO: The connection string should not be hard-coded.
 		val mongoClient: MongoClient = MongoClient("mongodb://mongodb")
 		val database: MongoDatabase = mongoClient.getDatabase("wacchat")

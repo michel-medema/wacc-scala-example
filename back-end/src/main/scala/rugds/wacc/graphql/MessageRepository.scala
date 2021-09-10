@@ -5,9 +5,7 @@ import rugds.wacc.WebServer.ChatMessage
 class MessageRepository {
   import MessageRepository._
 
-  def getMessages: List[ChatMessage] = {
-    messages
-  }
+  def getMessages: List[ChatMessage] = messages
 }
 
 object MessageRepository {

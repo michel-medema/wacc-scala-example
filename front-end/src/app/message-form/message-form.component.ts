@@ -22,6 +22,10 @@ export class MessageFormComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  clearError(): void {
+    this.hasError = false;
+  }
+
   sendMessage(): void {
     let name = this.messageForm.value.name
     let content = this.messageForm.value.content
