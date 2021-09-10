@@ -46,7 +46,7 @@ object WebServer {
 
 	def main(args: Array[String]): Unit = {
 		// TODO: The connection string should not be hard-coded.
-		val mongoClient: MongoClient = MongoClient("mongodb://mongodb")
+		val mongoClient: MongoClient = MongoClient("mongodb://172.17.0.2")
 		val database: MongoDatabase = mongoClient.getDatabase("wacchat")
 		val collection: MongoCollection[Document] = database.getCollection("messages")
 

@@ -1,27 +1,33 @@
 package rugds.wacc.chatroom
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, Props}
 import rugds.wacc.WebServer.ChatMessage
-import rugds.wacc.chatroom.events.{UserJoined, UserLeft}
+
+object ChatRoomActor {
+	sealed trait ChatEvent
+	final case class UserJoined(name: String, actor: ActorRef) extends ChatEvent
+	final case class UserLeft(name: String) extends ChatEvent
+
+	def props(): Props = Props(new ChatRoomActor())
+}
 
 class ChatRoomActor extends Actor {
-	var participants: Map[String, ActorRef] = Map.empty[String, ActorRef]
+	import ChatRoomActor._
 
-	override def receive: Receive = {
+	override def receive: Receive = receive( Map.empty )
+
+	private def receive( participants: Map[String, ActorRef] ): Receive = {
 		case UserJoined(name, actorRef) =>
-			participants += name -> actorRef
 			println(s"User $name joined channel")
+			context become receive( participants.+( name -> actorRef ) )
 
 		case UserLeft(name) =>
 			println(s"User $name left channel")
-			participants -= name
+			context become receive( participants.-( name ) )
 
-		case (user: String, msg: ChatMessage) =>
-			println(s"Message $msg")
-			broadcast(user, msg)
+		case (user: String, message: ChatMessage) =>
+			println(s"Message $message")
+			// Send message to all chat room users except the user who sent the message.
+			participants.-(user).values.foreach(_ ! message)
 	}
-
-	// Send message to all chat room users except the user who sent the message.
-	def broadcast(user: String, message: ChatMessage): Unit =
-		participants.filter( p => p._1 != user ).values.foreach(_ ! message)
 }
