@@ -36,17 +36,17 @@ object WebServer {
 		case _  => None
 	}
 
-	def websocketHandler(user: String): Flow[Message, TextMessage.Strict, NotUsed] =
+	def webSocketHandler(user: String): Flow[Message, TextMessage.Strict, NotUsed] =
 		Flow[Message]
 			.collect {
 				case TextMessage.Strict(msg) ⇒ msg.parseJson.convertTo[ChatMessage]
 			}
-			.via(chatRoom.websocketFlow(user))
+			.via(chatRoom.webSocketFlow(user))
 			.map( ( msg: ChatMessage ) ⇒ TextMessage.Strict(msg.toJson.compactPrint) )
 
 	def main(args: Array[String]): Unit = {
 		// TODO: The connection string should not be hard-coded.
-		val mongoClient: MongoClient = MongoClient("mongodb://172.17.0.2")
+		val mongoClient: MongoClient = MongoClient("mongodb://mongodb")
 		val database: MongoDatabase = mongoClient.getDatabase("wacchat")
 		val collection: MongoCollection[Document] = database.getCollection("messages")
 
@@ -93,7 +93,7 @@ object WebServer {
 			pathPrefix("socket.io") {
 				pathEndOrSingleSlash {
 					headerValue(extractWebsocketHeader) { websocketKey =>
-						handleWebSocketMessages(websocketHandler(websocketKey))
+						handleWebSocketMessages(webSocketHandler(websocketKey))
 					}
 				}
 			}

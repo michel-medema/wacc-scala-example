@@ -11,7 +11,6 @@ services:
   back-end:
     container_name: back-end
     image: michelm/wacc-backend
-    build: ./back-end/target/docker/stage
     depends_on:
       - mongodb
     ports:

@@ -12,7 +12,7 @@ class ChatRoom(actorSystem: ActorSystem) {
 	private def chatInSink(user: String): Sink[(String, ChatMessage), NotUsed] =
 		Sink.actorRef[(String, ChatMessage)](chatRoomActor, ChatRoomActor.UserLeft(user))
 
-	def websocketFlow(user: String): Flow[ChatMessage, ChatMessage, _] = {
+	def webSocketFlow(user: String): Flow[ChatMessage, ChatMessage, _] = {
 		// Flow that receives incoming messages and sends these to the chat room actor.
 		val in = Flow[ChatMessage].map( (user, _) ).to(chatInSink(user))
 
@@ -23,8 +23,6 @@ class ChatRoom(actorSystem: ActorSystem) {
 
 		Flow.fromSinkAndSource(in, out)
 	}
-
-	def sendMessage(message: ChatMessage): Unit = chatRoomActor ! message
 }
 
 object ChatRoom {
